@@ -75,8 +75,41 @@ src/
 
 
 ## AI tools and prompt summary
+AI Tools Used
+GitHub Copilot was used to draft components, game logic, the reducer, local storage helpers, and test cases.
 
-The given requirements were organized around game rules, computer strategy, state transitions, persistence, UI, and tests. AI assistance was used to draft and connect the React components, pure game logic, reducer, local storage helpers, and test cases. The implementation was then adjusted to meet the requested behavior, including disabling undo after completion, canceling delayed computer moves on reset/undo, and checking invalid stored scores. The automated tests exercise core game outcomes, computer priorities, controls, and local storage. See the test command above for the verification entry point.
+AI was used as an accelerator. I made the design decisions, reviewed the generated code, and ran the tests myself.
+
+Prompt Summary
+
+The requirements were organized around game rules, computer strategy, state transitions, persistence, UI, and tests. The prompt asked for a frontend-only Tic Tac Toe application in React.js, with no backend. It covered:
+
+Game rules: Turn management, move validation, win detection, draw detection, and game completion.
+Computer opponent: A deterministic, priority-based strategy implemented in pure functions (win, then block, then center, then corner, then side).
+State management: A reducer handling moves, undo, reset, and mode changes.
+Scoreboard and persistence: X wins, O wins, and draws stored in local storage, with validation of stored values.
+UI: React components for the board, status, controls, and scoreboard.
+Testing: Automated tests for game outcomes, computer priorities, controls, and local storage.
+AI-Assisted Workflow
+Defined the game rules, state shape, and transitions.
+Implemented the pure game logic and computer strategy.
+Built the reducer for moves, undo, and reset.
+Added local storage helpers for the scoreboard.
+Built the React components and wired them to the reducer.
+Wrote tests for the logic, controls, and storage.
+
+Review and Adjustments
+
+I reviewed the AI-generated code and adjusted it to meet the requested behavior:
+
+Undo is disabled once the game is complete.
+Pending computer moves are canceled on reset and undo, so a delayed move can’t land on a new game.
+Invalid or corrupted stored scores are detected and handled instead of breaking the scoreboard.
+
+Additions After the First Version
+Limited undo: Each player gets one undo per game, and the allowance resets when a new game starts. This goes beyond the original requirements.
+Move history table: The AI-generated version showed moves as a plain list with no move numbers. I replaced it with a table with Move, Player, Position, and Type columns, so each move is numbered and easy to scan. I styled it with alternating row colors, a hover highlight, and separate colors for X and O.
+Single-screen layout: I used AI to refine the desktop CSS so the board, scoreboard, and move history fit the viewport without page scrolling. The move history scrolls inside its own panel.
 
 ## Design decisions
 
