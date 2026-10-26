@@ -1,6 +1,19 @@
 # Tic Tac Toe — React Frontend
 
-A complete, browser-based Tic Tac Toe game built with React. **This project is frontend-only:** it has no backend, REST API, server-side game logic, or database. Game rules run in JavaScript in the browser; the scoreboard is persisted with `localStorage`.
+A complete, browser-based Tic Tac Toe game built with React. **This project is frontend-only:** it has no backend, REST API, server-side game logic, or database. Game rules run in JavaScript in the browser, the scoreboard is persisted with `localStorage`.
+
+
+## Technology
+
+- React 19 and JavaScript (ES6+)
+- CSS
+- Jest and React Testing Library
+- Browser `localStorage`
+
+## Prerequisites
+
+- Node.js 18
+
 
 ## Features
 
@@ -13,17 +26,7 @@ A complete, browser-based Tic Tac Toe game built with React. **This project is f
 - Scoreboard persists across browser reloads and validates stored data.
 - Keyboard-focus indicators and responsive layout.
 
-## Technology
-
-- React 19 and JavaScript (ES6+)
-- CSS
-- Jest and React Testing Library
-- Browser `localStorage`
-
-## Prerequisites
-
-- Node.js 18 or newer
-- npm 9 or newer
+Additional : **Limited undo:** each player gets only one undo per game. Once a player has used theirs, their Undo is unavailable for the rest of that game, and the allowance resets when a new game starts.
 
 ## Install and run
 
@@ -36,7 +39,7 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000). No backend or API needs to be started.
 
-Run the test suite:
+## Run the test suite:
 
 ```bash
 npm test -- --watch=false --runInBand
@@ -70,7 +73,12 @@ src/
 └── App.test.js
 ```
 
-## Design and rules
+
+## AI tools and prompt summary
+
+The given requirements were organized around game rules, computer strategy, state transitions, persistence, UI, and tests. AI assistance was used to draft and connect the React components, pure game logic, reducer, local storage helpers, and test cases. The implementation was then adjusted to meet the requested behavior, including disabling undo after completion, canceling delayed computer moves on reset/undo, and checking invalid stored scores. The automated tests exercise core game outcomes, computer priorities, controls, and local storage. See the test command above for the verification entry point.
+
+## Design decisions
 
 `useGame` and its reducer own the browser-side game state. Pure functions in `utils/gameLogic.js` detect wins and draws, while `utils/computerLogic.js` selects the computer move. A React effect schedules the computer turn after a short delay; cleanup and a game-generation token prevent a canceled turn from affecting a reset or undone game.
 
@@ -84,20 +92,16 @@ The computer's move priority is:
 
 Scoreboard state is managed in React and written to `localStorage`. Invalid stored data resets to zero counts with a visible message. The scoreboard is local to the browser profile and is not shared between devices or browsers.
 
-## AI-assisted development notes
-
-The given requirements were organized around game rules, computer strategy, state transitions, persistence, UI, and tests. AI assistance was used to draft and connect the React components, pure game logic, reducer, local storage helpers, and test cases. The implementation was then adjusted to meet the requested behavior, including disabling undo after completion, canceling delayed computer moves on reset/undo, and checking invalid stored scores. The automated tests exercise core game outcomes, computer priorities, controls, and local storage. See the test command above for the verification entry point.
-
-## Assumptions and limitations
+## 10. Clarifications and assumptions
 
 - Each browser profile has its own scoreboard, clearing browser site data also clears the saved scores.
-- The computer uses the required deterministic heuristic rather than a full minimax strategy, so it is not guaranteed to play perfectly.
-- Game state and move history are not persisted after a page reload, only the scoreboard is.
 - No accounts, network services, or multiplayer across devices are included.
+
+## 11. Known limitations
+
+- Game state and move history are not persisted after a page reload, only the scoreboard is saved.
 
 ## Possible future improvements
 
-- Add an optional perfect-play minimax opponent.
-- Add configurable computer difficulty and sound preferences.
-- Persist the current game locally if reload recovery is desired.
-
+- Add a perfect-play minimax opponent and selectable difficulty (easy: random, medium: current rules, hard: minimax).
+- Persist the in-progress game so a reload doesn't lose it.
