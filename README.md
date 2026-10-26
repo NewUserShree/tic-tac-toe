@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# Tic Tac Toe — React Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A complete, browser-based Tic Tac Toe game built with React. **This project is frontend-only:** it has no backend, REST API, server-side game logic, or database. Game rules run in JavaScript in the browser; the scoreboard is persisted with `localStorage`.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Two Player and Play Against Computer modes.
+- 3 × 3 board with turn validation, win/draw detection, and highlighted winning cells.
+- Computer plays O using deterministic win/block/center/corner/first-open priorities.
+- Move history with one-based row and column positions.
+- Undo: one move in Two Player mode; the most recent human/computer pair in Computer mode. Undo is disabled after a result.
+- Reset Game preserves the scoreboard. Reset Scoreboard asks for confirmation.
+- Scoreboard persists across browser reloads and validates stored data.
+- Keyboard-focus indicators and responsive layout.
 
-### `npm start`
+## Technology
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React 19 and JavaScript (ES6+)
+- CSS
+- Jest and React Testing Library
+- Browser `localStorage`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+- Node.js 18 or newer
+- npm 9 or newer
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Install and run
 
-### `npm run build`
+From this directory:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Open [http://localhost:3000](http://localhost:3000). No backend or API needs to be started.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Run the test suite:
 
-### `npm run eject`
+```bash
+npm test -- --watch=false --runInBand
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Create a production build:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```text
+src/
+├── components/
+│   ├── GameBoard.jsx
+│   ├── GameCell.jsx
+│   ├── GameControls.jsx
+│   ├── GameStatus.jsx
+│   ├── MoveHistory.jsx
+│   └── Scoreboard.jsx
+├── hooks/
+│   └── useGame.js
+├── utils/
+│   ├── computerLogic.js
+│   ├── gameLogic.js
+│   └── storage.js
+├── App.js
+├── App.css
+└── App.test.js
+```
 
-## Learn More
+## Design and rules
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`useGame` and its reducer own the browser-side game state. Pure functions in `utils/gameLogic.js` detect wins and draws, while `utils/computerLogic.js` selects the computer move. A React effect schedules the computer turn after a short delay; cleanup and a game-generation token prevent a canceled turn from affecting a reset or undone game.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The computer's move priority is:
 
-### Code Splitting
+1. Make an immediate O win.
+2. Block an immediate X win.
+3. Take the center.
+4. Take the first available corner.
+5. Take the first remaining empty cell.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Scoreboard state is managed in React and written to `localStorage`. Invalid stored data resets to zero counts with a visible message. The scoreboard is local to the browser profile and is not shared between devices or browsers.
 
-### Analyzing the Bundle Size
+## AI-assisted development notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The given requirements were organized around game rules, computer strategy, state transitions, persistence, UI, and tests. AI assistance was used to draft and connect the React components, pure game logic, reducer, local storage helpers, and test cases. The implementation was then adjusted to meet the requested behavior, including disabling undo after completion, canceling delayed computer moves on reset/undo, and checking invalid stored scores. The automated tests exercise core game outcomes, computer priorities, controls, and local storage. See the test command above for the verification entry point.
 
-### Making a Progressive Web App
+## Assumptions and limitations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Each browser profile has its own scoreboard, clearing browser site data also clears the saved scores.
+- The computer uses the required deterministic heuristic rather than a full minimax strategy, so it is not guaranteed to play perfectly.
+- Game state and move history are not persisted after a page reload, only the scoreboard is.
+- No accounts, network services, or multiplayer across devices are included.
 
-### Advanced Configuration
+## Possible future improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Add an optional perfect-play minimax opponent.
+- Add configurable computer difficulty and sound preferences.
+- Persist the current game locally if reload recovery is desired.
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
